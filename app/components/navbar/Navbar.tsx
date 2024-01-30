@@ -10,7 +10,6 @@ function Navbar() {
   const router = useRouter();
   const handleSearch = () => {
     console.log(`Buscar ${searchText} en ${filterOption}`);
-    // Implementa la lógica de búsqueda
   };
 
   return (
