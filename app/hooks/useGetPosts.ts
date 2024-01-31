@@ -12,6 +12,7 @@ function useGetPosts() {
       .then((res) => {
         const data = res.data.res;
         if (Array.isArray(data)) {
+          console.log(data);
           setPosts(data);
           setIsLoading(false);
         } else {

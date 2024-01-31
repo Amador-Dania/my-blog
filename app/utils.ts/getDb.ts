@@ -1,15 +1,18 @@
 import pgPromise from "pg-promise";
-
-const dbConfig = {
-  host: "localhost",
-  port: 5432,
-  database: "myblog",
-  user: "postgres",
-  password: "postgres",
-};
+import { createSingleton } from "./createSingleton";
 
 const pgPromiseInitialized = pgPromise();
 
-const db = pgPromiseInitialized(dbConfig);
+export function getDbConnection() {
+  const dbConfig = {
+    host: "localhost",
+    port: 5432,
+    database: "myblog",
+    user: "postgres",
+    password: "postgres",
+  };
 
-export default db;
+  return pgPromiseInitialized(dbConfig);
+}
+
+export const db = createSingleton("db", getDbConnection);

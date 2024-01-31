@@ -1,5 +1,7 @@
 "use client";
 import useGetPosts from "@/app/hooks/useGetPosts";
+import { format, parseISO } from "date-fns";
+import Link from "next/link";
 
 function PostList() {
   const { posts, isLoading } = useGetPosts();
@@ -7,21 +9,29 @@ function PostList() {
 
   return (
     <>
-      {posts?.map((post) => {
-        <div className="grid grid-cols-4 gap-4 " key={post.id}>
-          <div className="bg-white p-4 shadow rounded-lg mb-4">
-            <h2 className="text-lg font-bold">{post.title} </h2>
-            <p className="text-sm text-gray-600">By {post.author.author}</p>
+      {posts.map((post) => (
+        <div
+          key={post.id}
+          className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg mb-6 shadow-lg"
+        >
+          <div className="p-4">
+            <h2 className="text-lg font-semibold text-gray-800">
+              {post.title}
+            </h2>
+            <p className="text-sm text-gray-600">Author: {post.author}</p>
             <p className="text-sm text-gray-500">
-              date: {post.publicationDate}
+              Publish on:{" "}
+              {format(parseISO(post.publication_date), "yyyy-MM-dd")}
             </p>
-            <p className="text-gray-800">{post.content}</p>
-            <button className="text-gray-600 bg-gray-200 hover:bg-gray-300 p-2 rounded transition duration-300">
-              read more
-            </button>
+            <p className=" text-gray-700 mt-2">
+              {post.content.length > 70
+                ? `${post.content.substring(0, 70)}`
+                : post.content}
+              <Link href={`/post/${encodeURIComponent(post.id)}`}>...</Link>
+            </p>
           </div>
-        </div>;
-      })}
+        </div>
+      ))}
     </>
   );
 }

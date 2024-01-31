@@ -1,4 +1,4 @@
-import db from "@/app/utils.ts/getDb";
+import { db } from "@/app/utils.ts/getDb";
 
 export async function GET() {
   const res = await db.many("SELECT * FROM posts");
