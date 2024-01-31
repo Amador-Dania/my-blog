@@ -7,30 +7,41 @@ import axios from "axios";
 // Local types or models
 import Post from "../types/post";
 
+const hostName = "http://localhost:3000";
+
 function useGetPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/post")
-      .then((res) => {
-        const data = res.data.res;
-        if (Array.isArray(data)) {
-          setPosts(data);
-          setIsLoading(false);
-        } else {
+    const storedPost = localStorage.getItem("posts");
+
+    if (storedPost) {
+      setPosts(JSON.parse(storedPost));
+      setIsLoading(false);
+    } else {
+      const url = "/api/post";
+      axios
+        .get(hostName + url)
+        .then((res) => {
+          const data = res.data.res;
+          if (Array.isArray(data)) {
+            setPosts(data);
+            setIsLoading(false);
+          } else {
+            setIsLoading(true);
+            console.log('Error: "posts" is not an Array');
+          }
+          localStorage.setItem("posts", JSON.stringify(data));
+        })
+        .catch((error) => {
+          console.log("Error", error);
           setIsLoading(true);
-          console.log('Error: "posts" is not an Array');
-        }
-      })
-      .catch((error) => {
-        console.log("Error", error);
-        setIsLoading(true);
-      });
+        });
+    }
   }, []);
 
-  return { posts, setPosts, isLoading };
+  return { posts, isLoading };
 }
 
 export default useGetPosts;

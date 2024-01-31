@@ -48,14 +48,15 @@ function PostList({ searchText, filterOption }: PostListProps) {
             </h2>
             <p className="text-sm text-gray-600">Author: {post.author}</p>
             <p className="text-sm text-gray-500">
-              Publish on:{" "}
               {format(parseISO(post.publication_date), "yyyy-MM-dd")}
             </p>
             <p className=" text-gray-700 mt-2">
               {post.content.length > 70
                 ? `${post.content.substring(0, 70)}`
                 : post.content}
-              <Link href={`/post/${encodeURIComponent(post.id)}`}>...</Link>
+              <Link href={`dashboard/post/${encodeURIComponent(post.id)}`}>
+                ...
+              </Link>
             </p>
           </div>
         </div>

@@ -40,6 +40,7 @@ function CreatePost() {
       return;
     }
     axios.post("http://localhost:3000/api/post", newPost);
+    localStorage.removeItem("posts");
     router.push("/");
   };
 

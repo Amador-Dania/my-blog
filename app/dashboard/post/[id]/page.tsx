@@ -29,7 +29,7 @@ export default function Post() {
               {post?.title}
             </h1>
             <p className="text-md text-gray-600 mb-1">
-              Publish by : {post?.author}
+              Author : {post?.author}
             </p>
             <p className="text-md text-gray-500 mb-4">
               Publication date:{" "}

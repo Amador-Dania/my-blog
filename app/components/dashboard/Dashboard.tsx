@@ -26,7 +26,9 @@ function Dashboard({
         filterOption={filterOption}
         setFilterOption={setFilterOption}
       />
-      <div className="mt-[60px] p-4 min-h-screen">{children}</div>
+      <div className="mt-[200px] sm:mt-[100px] p-4 min-h-screen">
+        {children}
+      </div>
     </>
   );
 }
