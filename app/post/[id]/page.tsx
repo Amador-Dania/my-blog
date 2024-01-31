@@ -1,10 +1,16 @@
 "use client";
-import * as React from "react";
+// Third-party libraries
+import { format, parseISO } from "date-fns";
+
+// Next.js navigation hooks
 import { useParams, useRouter } from "next/navigation";
 
-import useGetPosts from "@/app/hooks/useGetPosts";
+// React import
+import * as React from "react";
+
+// Local components
 import Dashboard from "@/app/components/dashboard/Dashboard";
-import { format, parseISO } from "date-fns";
+import useGetPosts from "@/app/hooks/useGetPosts";
 
 export default function Post() {
   const { id } = useParams();

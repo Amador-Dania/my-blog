@@ -1,16 +1,24 @@
 "use client";
-
-import React, { useState } from "react";
+//  Next.js hooks and utilities
 import { useRouter } from "next/navigation";
 
-function Navbar() {
-  const [searchText, setSearchText] = useState("");
-  const [filterOption, setFilterOption] = useState("title");
+// React import
+import React, { Dispatch, SetStateAction } from "react";
 
+interface NavbarProps {
+  searchText?: string;
+  setSearchText?: Dispatch<SetStateAction<string>>;
+  filterOption?: string;
+  setFilterOption?: Dispatch<SetStateAction<string>>;
+}
+
+function Navbar({
+  searchText,
+  setSearchText,
+  filterOption,
+  setFilterOption,
+}: NavbarProps) {
   const router = useRouter();
-  const handleSearch = () => {
-    console.log(`Buscar ${searchText} en ${filterOption}`);
-  };
 
   return (
     <>
@@ -28,23 +36,19 @@ function Navbar() {
               className="p-2 border border-gray-300 rounded-md"
               placeholder="Buscar..."
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={(e) => setSearchText && setSearchText(e.target.value)}
             />
             <select
               className="p-2 border border-gray-300 rounded-md"
               value={filterOption}
-              onChange={(e) => setFilterOption(e.target.value)}
+              onChange={(e) =>
+                setFilterOption && setFilterOption(e.target.value)
+              }
             >
               <option value="title">Title</option>
               <option value="content">Content</option>
               <option value="author">Author</option>
             </select>
-            <button
-              className="ml-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700"
-              onClick={handleSearch}
-            >
-              Search
-            </button>
             <button
               className="ml-2 bg-green-500 text-white p-2 rounded-md hover:bg-green-700"
               type="button"

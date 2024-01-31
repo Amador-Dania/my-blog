@@ -1,3 +1,4 @@
+// local components
 import CreatePost from "@/app/components/createPost/CreatePost";
 import Dashboard from "@/app/components/dashboard/Dashboard";
 

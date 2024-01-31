@@ -1,6 +1,11 @@
+// React import
 import { useEffect, useState } from "react";
-import Post from "../types/post";
+
+// Third-party libraries
 import axios from "axios";
+
+// Local types or models
+import Post from "../types/post";
 
 function useGetPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -12,7 +17,6 @@ function useGetPosts() {
       .then((res) => {
         const data = res.data.res;
         if (Array.isArray(data)) {
-          console.log(data);
           setPosts(data);
           setIsLoading(false);
         } else {

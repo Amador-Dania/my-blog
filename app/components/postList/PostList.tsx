@@ -1,15 +1,43 @@
 "use client";
-import useGetPosts from "@/app/hooks/useGetPosts";
+// Third-party libraries
 import { format, parseISO } from "date-fns";
+
+// Next.js hooks and utilities
 import Link from "next/link";
 
-function PostList() {
+//Local components
+import useGetPosts from "@/app/hooks/useGetPosts";
+
+interface PostListProps {
+  searchText?: string;
+  filterOption?: string;
+}
+
+function PostList({ searchText, filterOption }: PostListProps) {
   const { posts, isLoading } = useGetPosts();
+
+  const filteredPosts = (() => {
+    if (!searchText) return posts;
+
+    return posts.filter((post) => {
+      switch (filterOption) {
+        case "title":
+          return post.title.toLowerCase().includes(searchText.toLowerCase());
+        case "author":
+          return post.author.toLowerCase().includes(searchText.toLowerCase());
+        case "content":
+          return post.content.toLowerCase().includes(searchText.toLowerCase());
+        default:
+          return true;
+      }
+    });
+  })();
+
   if (isLoading) return <h1>...loading</h1>;
 
   return (
     <>
-      {posts.map((post) => (
+      {filteredPosts.map((post) => (
         <div
           key={post.id}
           className="max-w-md mx-auto bg-white rounded-lg overflow-hidden md:max-w-lg mb-6 shadow-lg"

@@ -1,4 +1,7 @@
+// Third-party libraries
 import pgPromise from "pg-promise";
+
+// Utilities
 import { createSingleton } from "./createSingleton";
 
 const pgPromiseInitialized = pgPromise();

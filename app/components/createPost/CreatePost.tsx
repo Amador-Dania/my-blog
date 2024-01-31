@@ -1,8 +1,12 @@
 "use client";
+// Third-party libraries
 import axios from "axios";
 import { format } from "date-fns";
 
+//  Next.js hooks and utilities
 import { useRouter } from "next/navigation";
+
+// React import
 import { useState } from "react";
 
 interface newPostInterface {
@@ -19,20 +23,24 @@ function CreatePost() {
     publicationDate: format(new Date(), "yyyy-MM-dd"),
     content: "",
   });
+  const [errorMessage, setErrorMessage] = useState("");
+
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    axios
-      .post("http://localhost:3000/api/post", newPost)
-      .then((response) => {
-        console.log("Post enviado con exito", response.data);
-        router.push("/");
-      })
-      .catch((error) => {
-        console.error("Error al crear el post:", error);
-      });
+    if (
+      !newPost.title ||
+      !newPost.author ||
+      !newPost.publicationDate ||
+      !newPost.content
+    ) {
+      setErrorMessage("All fields must be filled out.");
+      return;
+    }
+    axios.post("http://localhost:3000/api/post", newPost);
+    router.push("/");
   };
 
   return (
@@ -50,12 +58,13 @@ function CreatePost() {
             id="title"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             value={newPost.title}
-            onChange={(e) =>
+            onChange={(e) => {
               setNewPost({
                 ...newPost,
                 title: e.target.value,
-              })
-            }
+              });
+              setErrorMessage("");
+            }}
           />
         </div>
 
@@ -71,7 +80,10 @@ function CreatePost() {
             id="author"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             value={newPost.author}
-            onChange={(e) => setNewPost({ ...newPost, author: e.target.value })}
+            onChange={(e) => {
+              setNewPost({ ...newPost, author: e.target.value });
+              setErrorMessage("");
+            }}
           />
         </div>
 
@@ -101,6 +113,7 @@ function CreatePost() {
                 ...newPost,
                 content: e.target.value,
               });
+              setErrorMessage("");
             }}
           />
         </div>
@@ -111,6 +124,7 @@ function CreatePost() {
         >
           Create Post
         </button>
+        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       </form>
     </div>
   );
