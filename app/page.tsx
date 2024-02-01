@@ -5,6 +5,7 @@ import { useState } from "react";
 //Local components
 import PostList from "./components/postList/PostList";
 import Dashboard from "./components/dashboard/Dashboard";
+import OfflineAlert from "./components/offlineAlert/OfflineAlert";
 
 export default function Home() {
   const [searchText, setSearchText] = useState("");
@@ -18,6 +19,7 @@ export default function Home() {
         filterOption={filterOption}
         setFilterOption={setFilterOption}
       >
+        <OfflineAlert />
         <PostList searchText={searchText} filterOption={filterOption} />
       </Dashboard>
     </main>

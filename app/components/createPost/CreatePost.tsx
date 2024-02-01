@@ -27,6 +27,8 @@ function CreatePost() {
 
   const router = useRouter();
 
+  const hostName = "http://localhost:3000";
+  const url = "/api/post";
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -39,8 +41,8 @@ function CreatePost() {
       setErrorMessage("All fields must be filled out.");
       return;
     }
-    axios.post("http://localhost:3000/api/post", newPost);
-    localStorage.removeItem("posts");
+    axios.post(hostName + url, newPost);
+    localStorage.removeItem(url);
     router.push("/");
   };
 
@@ -118,7 +120,6 @@ function CreatePost() {
             }}
           />
         </div>
-
         <button
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

@@ -8,19 +8,19 @@ import axios from "axios";
 import Post from "../types/post";
 
 const hostName = "http://localhost:3000";
+const url = "/api/post";
 
 function useGetPosts() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const storedPost = localStorage.getItem("posts");
+    const storedPost = localStorage.getItem(url);
 
     if (storedPost) {
       setPosts(JSON.parse(storedPost));
       setIsLoading(false);
     } else {
-      const url = "/api/post";
       axios
         .get(hostName + url)
         .then((res) => {

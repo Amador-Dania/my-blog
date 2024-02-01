@@ -1,10 +1,12 @@
 "use client";
-import useGetPosts from "@/app/hooks/useGetPosts";
 //  Next.js hooks and utilities
 import { useRouter } from "next/navigation";
 
 // React import
 import React, { Dispatch, SetStateAction } from "react";
+
+//Local imports
+import useNetworkStatus from "@/app/hooks/useNetworkStatus";
 
 interface NavbarProps {
   searchText?: string;
@@ -20,7 +22,7 @@ function Navbar({
   setFilterOption,
 }: NavbarProps) {
   const router = useRouter();
-
+  const { isOnline } = useNetworkStatus();
   return (
     <div className="fixed top-0 left-0 w-full bg-white z-10">
       <div className="p-2 md:p-4 flex flex-col md:flex-row items-center justify-between">
@@ -49,15 +51,20 @@ function Navbar({
             <option value="content">Content</option>
             <option value="author">Author</option>
           </select>
-          <button
-            className={
-              "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md"
-            }
-            type="button"
-            onClick={() => router.push("/dashboard/create", { scroll: false })}
-          >
-            Create a new post
-          </button>
+          <div>
+            <button
+              disabled={!isOnline}
+              className={`${
+                isOnline ? "bg-green-500 hover:bg-green-700" : "bg-gray-500"
+              } text-white font-bold py-2 px-4 rounded-md`}
+              type="button"
+              onClick={() =>
+                router.push("/dashboard/create", { scroll: false })
+              }
+            >
+              Create a new post
+            </button>
+          </div>
         </div>
       </div>
       <hr />
