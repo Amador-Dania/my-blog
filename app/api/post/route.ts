@@ -1,27 +1,45 @@
-import { db } from "@/app/utils.ts/getDb";
+import { NextResponse } from "next/server";
+import { prisma } from "@/prisma/db";
 
 export async function GET() {
-  const res = await db.many("SELECT * FROM posts");
-  return Response.json({ res });
+  try {
+    const posts = await prisma.post.findMany({
+      include: {
+        author: true,
+      },
+    });
+    console.log("Posts retrieved:", posts);
+    return NextResponse.json(posts);
+  } catch (error) {
+    console.error("Error retrieving posts:", error);
+    return NextResponse.json({ error: error }, { status: 500 });
+  }
 }
 
 export async function POST(req: Request) {
-  const data = await req.json();
-  const result = await db.one(
-    "INSERT INTO posts (title, author, publication_date, content) VALUES(${title}, ${author}, ${publication_date}, ${content}) RETURNING *",
-    {
-      title: data.title,
-      author: data.author,
-      publication_date: data.publicationDate,
-      content: data.content,
-    }
-  );
+  const { name, title, content, createdAt } = await req.json();
+  console.log(name, title, content);
+
+  if (
+    typeof name !== "string" ||
+    typeof title !== "string" ||
+    typeof content !== "string" ||
+    typeof createdAt !== "string"
+  ) {
+    return Response.error();
+  }
+
+  const result = await prisma.post.create({
+    data: {
+      title: title,
+      content: content,
+      createdAt: new Date(createdAt),
+      author: {
+        create: { name: name },
+      },
+    },
+  });
 
   console.log(result);
-
-  // We can use every supported variable syntax at the same time, if needed:
-
-  return Response.json({
-    data,
-  });
+  return NextResponse.json({ result });
 }

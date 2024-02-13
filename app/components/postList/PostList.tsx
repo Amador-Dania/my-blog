@@ -25,7 +25,9 @@ function PostList({ searchText, filterOption }: PostListProps) {
         case "title":
           return post.title.toLowerCase().includes(searchText.toLowerCase());
         case "author":
-          return post.author.toLowerCase().includes(searchText.toLowerCase());
+          return post.author.name
+            .toLowerCase()
+            .includes(searchText.toLowerCase());
         case "content":
           return post.content.toLowerCase().includes(searchText.toLowerCase());
         default:
@@ -48,9 +50,11 @@ function PostList({ searchText, filterOption }: PostListProps) {
               <h2 className="text-lg font-semibold text-gray-800">
                 {post.title}
               </h2>
-              <p className="text-sm text-gray-600">Author: {post.author}</p>
+              <p className="text-sm text-gray-600">
+                Author: {post.author.name}
+              </p>
               <p className="text-sm text-gray-500">
-                {format(parseISO(post.publication_date), "yyyy-MM-dd")}
+                {format(parseISO(post.createdAt), "yyyy-MM-dd")}
               </p>
               <p className="text-gray-700 mt-2">
                 {post.content.length > 70

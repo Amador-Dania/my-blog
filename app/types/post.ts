@@ -1,9 +1,9 @@
-import Author from "./author";
+import author from "./author";
 
 export default interface Post {
   id: number;
+  author: author;
   title: string;
-  author: string;
-  publication_date: string;
+  createdAt: string;
   content: string;
 }

@@ -25,10 +25,11 @@ export default function Post({ post }: PostProps) {
           <h1 className="text-4xl font-bold text-gray-800 mb-3">
             {post.title}
           </h1>
-          <p className="text-md text-gray-600 mb-1">Author: {post.author}</p>
+          <p className="text-md text-gray-600 mb-1">
+            Author: {post.author.name}
+          </p>
           <p className="text-md text-gray-500 mb-4">
-            Publication date:{" "}
-            {format(parseISO(post.publication_date), "yyyy-MM-dd")}
+            Publication date: {format(parseISO(post.createdAt), "yyyy-MM-dd")}
           </p>
           <div className="text-gray-700 text-lg whitespace-pre-line">
             {post.content}

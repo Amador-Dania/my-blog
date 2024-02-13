@@ -1,4 +1,5 @@
 "use client";
+import { Post } from "@prisma/client";
 // Third-party libraries
 import axios from "axios";
 import { format } from "date-fns";
@@ -10,18 +11,18 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface newPostInterface {
+  name: string;
   title: string;
-  author: string;
-  publicationDate: string;
   content: string;
+  createdAt: string;
 }
 
 function CreatePost() {
   const [newPost, setNewPost] = useState<newPostInterface>({
+    name: "",
     title: "",
-    author: "",
-    publicationDate: format(new Date(), "yyyy-MM-dd"),
     content: "",
+    createdAt: format(new Date(), "yyyy-MM-dd"),
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -33,17 +34,29 @@ function CreatePost() {
     e.preventDefault();
 
     if (
+      !newPost.name ||
       !newPost.title ||
-      !newPost.author ||
-      !newPost.publicationDate ||
-      !newPost.content
+      !newPost.content ||
+      !newPost.createdAt
     ) {
       setErrorMessage("All fields must be filled out.");
       return;
     }
-    axios.post(hostName + url, newPost);
-    localStorage.removeItem(url);
-    router.push("/");
+    axios
+      .post(`${hostName}${url}`, newPost, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        console.log(response.data);
+        localStorage.removeItem(url);
+        router.push("/");
+      })
+      .catch((error) => {
+        setErrorMessage(error.response.data.message || "An error occurred");
+        console.error("Error creating the post", error.response);
+      });
   };
 
   return (
@@ -73,18 +86,18 @@ function CreatePost() {
 
         <div>
           <label
-            htmlFor="author"
+            htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
             Author
           </label>
           <input
             type="text"
-            id="author"
+            id="name"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={newPost.author}
+            value={newPost.name}
             onChange={(e) => {
-              setNewPost({ ...newPost, author: e.target.value });
+              setNewPost({ ...newPost, name: e.target.value });
               setErrorMessage("");
             }}
           />
@@ -95,7 +108,7 @@ function CreatePost() {
             htmlFor="date"
             className="block text-sm font-medium text-gray-700"
           >
-            Publication date : {newPost.publicationDate}
+            Publication date : {newPost.createdAt}
           </label>
         </div>
 

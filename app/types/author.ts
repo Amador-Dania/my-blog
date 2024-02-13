@@ -1,7 +1,8 @@
 import Post from "./post";
 
-export default interface Author {
+export default interface author {
   id: string;
-  author: string;
+  email: string;
+  name: string;
   posts: Post[];
 }
