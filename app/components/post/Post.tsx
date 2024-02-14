@@ -1,6 +1,7 @@
 "use client";
 // Third-party libraries
 import { format, parseISO } from "date-fns";
+import axios from "axios";
 
 // Next.js navigation hooks
 import { useRouter } from "next/navigation";
@@ -13,9 +14,10 @@ import Post from "@/app/types/post";
 
 interface PostProps {
   post: Post;
+  deletePost: (post: Post) => any;
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post, deletePost }: PostProps) {
   const router = useRouter();
 
   return (
@@ -34,26 +36,50 @@ export default function Post({ post }: PostProps) {
           <div className="text-gray-700 text-lg whitespace-pre-line">
             {post.content}
           </div>
-          <button
-            className="text-black font-bold py-2 px-4 rounded my-4 flex items-center"
-            onClick={() => router.push("/")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+          <div className="flex justify-between items-center mt-4">
+            <button
+              className="flex items-center justify-center bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => router.push("/")}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-            Go back
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              Regresar
+            </button>
+            <button
+              className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => {
+                deletePost(post);
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Eliminar
+            </button>
+          </div>
         </article>
       </div>
     </>
