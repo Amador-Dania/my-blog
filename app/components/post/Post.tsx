@@ -14,11 +14,23 @@ import Post from "@/app/types/post";
 
 interface PostProps {
   post: Post;
-  deletePost: (post: Post) => any;
 }
 
-export default function Post({ post, deletePost }: PostProps) {
+const hostName = "http://localhost:3000";
+const url = "/api/post";
+
+export default function Post({ post }: PostProps) {
   const router = useRouter();
+
+  function deletePost() {
+    try {
+      axios.delete(`${hostName}${url}/${post?.id}`);
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.log("Error deleting post", error);
+    }
+  }
 
   return (
     <>
@@ -60,7 +72,7 @@ export default function Post({ post, deletePost }: PostProps) {
             <button
               className="flex items-center justify-center bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => {
-                deletePost(post);
+                deletePost();
               }}
             >
               <svg

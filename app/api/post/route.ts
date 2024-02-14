@@ -8,10 +8,8 @@ export async function GET() {
         author: true,
       },
     });
-    console.log("Posts retrieved:", posts);
     return NextResponse.json(posts);
   } catch (error) {
-    console.error("Error retrieving posts:", error);
     return NextResponse.json({ error: error }, { status: 500 });
   }
 }
@@ -40,6 +38,5 @@ export async function POST(req: Request) {
     },
   });
 
-  console.log(result);
   return NextResponse.json({ result });
 }

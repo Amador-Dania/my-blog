@@ -17,6 +17,9 @@ interface newPostInterface {
   createdAt: string;
 }
 
+const hostName = "http://localhost:3000";
+const url = "/api/post";
+
 function CreatePost() {
   const [newPost, setNewPost] = useState<newPostInterface>({
     name: "",
@@ -27,9 +30,6 @@ function CreatePost() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const router = useRouter();
-
-  const hostName = "http://localhost:3000";
-  const url = "/api/post";
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
