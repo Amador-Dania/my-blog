@@ -1,14 +1,21 @@
 "use client";
-import { Post } from "@prisma/client";
+import Post from "@/app/types/post";
 // Third-party libraries
 import axios from "axios";
 import { format } from "date-fns";
+import { is } from "date-fns/locale/is";
 
 //  Next.js hooks and utilities
 import { useRouter } from "next/navigation";
 
 // React import
 import { useState } from "react";
+
+// Local imports
+
+interface CreatePostProps {
+  existingPost?: Post;
+}
 
 interface newPostInterface {
   name: string;
@@ -20,14 +27,16 @@ interface newPostInterface {
 const hostName = "http://localhost:3000";
 const url = "/api/post";
 
-function CreatePost() {
+function CreatePost({ existingPost }: CreatePostProps) {
   const [newPost, setNewPost] = useState<newPostInterface>({
-    name: "",
-    title: "",
-    content: "",
-    createdAt: format(new Date(), "yyyy-MM-dd"),
+    name: existingPost?.author.name || "",
+    title: existingPost?.title || "",
+    content: existingPost?.content || "",
+    createdAt: format(existingPost?.createdAt || new Date(), "yyyy-MM-dd"),
   });
   const [errorMessage, setErrorMessage] = useState("");
+
+  const isEditing = !!existingPost;
 
   const router = useRouter();
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,21 +51,38 @@ function CreatePost() {
       setErrorMessage("All fields must be filled out.");
       return;
     }
-    axios
-      .post(`${hostName}${url}`, newPost, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
+
+    if (isEditing) {
+      try {
+        const edit = axios.patch(`${hostName}${url}/${existingPost.id}`, {
+          title: newPost.title,
+          content: newPost.content,
+          name: newPost.name,
+        });
+
+        console.log(edit);
         localStorage.removeItem(url);
         router.push("/");
-      })
-      .catch((error) => {
-        setErrorMessage(error.response.data.message || "An error occurred");
-        console.error("Error creating the post", error.response);
-      });
+      } catch (error) {
+        console.log("Error", error);
+      }
+    } else {
+      axios
+        .post(`${hostName}${url}`, newPost, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          localStorage.removeItem(url);
+          router.push("/");
+        })
+        .catch((error) => {
+          setErrorMessage(error.response.data.message || "An error occurred");
+          console.error("Error creating the post", error.response);
+        });
+    }
   };
 
   return (
@@ -137,7 +163,7 @@ function CreatePost() {
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Create Post
+          {isEditing ? "Save Changes" : "Create Post"}
         </button>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       </form>
