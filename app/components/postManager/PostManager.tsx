@@ -1,50 +1,22 @@
 "use client";
-// Third-party libraries
-import axios from "axios";
-import { format } from "date-fns";
 
-//  Next.js hooks and utilities
-import { useRouter } from "next/navigation";
+// Local imports
+import Post from "@/app/types/post";
+import usePostManager from "./usePostManager";
 
-// React import
-import { useState } from "react";
-
-interface newPostInterface {
-  title: string;
-  author: string;
-  publicationDate: string;
-  content: string;
+interface PostManagerProps {
+  existingPost?: Post;
 }
 
-function CreatePost() {
-  const [newPost, setNewPost] = useState<newPostInterface>({
-    title: "",
-    author: "",
-    publicationDate: format(new Date(), "yyyy-MM-dd"),
-    content: "",
-  });
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const router = useRouter();
-
-  const hostName = "http://localhost:3000";
-  const url = "/api/post";
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (
-      !newPost.title ||
-      !newPost.author ||
-      !newPost.publicationDate ||
-      !newPost.content
-    ) {
-      setErrorMessage("All fields must be filled out.");
-      return;
-    }
-    axios.post(hostName + url, newPost);
-    localStorage.removeItem(url);
-    router.push("/");
-  };
+function PostManager({ existingPost }: PostManagerProps) {
+  const {
+    handleSubmit,
+    newPost,
+    setNewPost,
+    errorMessage,
+    setErrorMessage,
+    isEditing,
+  } = usePostManager(existingPost);
 
   return (
     <div className="container mx-auto p-4">
@@ -73,18 +45,18 @@ function CreatePost() {
 
         <div>
           <label
-            htmlFor="author"
+            htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
             Author
           </label>
           <input
             type="text"
-            id="author"
+            id="name"
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            value={newPost.author}
+            value={newPost.name}
             onChange={(e) => {
-              setNewPost({ ...newPost, author: e.target.value });
+              setNewPost({ ...newPost, name: e.target.value });
               setErrorMessage("");
             }}
           />
@@ -95,7 +67,7 @@ function CreatePost() {
             htmlFor="date"
             className="block text-sm font-medium text-gray-700"
           >
-            Publication date : {newPost.publicationDate}
+            Publication date : {newPost.createdAt}
           </label>
         </div>
 
@@ -124,7 +96,7 @@ function CreatePost() {
           type="submit"
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
-          Create Post
+          {isEditing ? "Save Changes" : "Create Post"}
         </button>
         {errorMessage && <p className="text-red-500">{errorMessage}</p>}
       </form>
@@ -132,4 +104,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default PostManager;

@@ -22,9 +22,9 @@ function useGetPosts() {
       setIsLoading(false);
     } else {
       axios
-        .get(hostName + url)
+        .get(`${hostName}${url}`)
         .then((res) => {
-          const data = res.data.res;
+          const data = res.data;
           if (Array.isArray(data)) {
             setPosts(data);
             setIsLoading(false);
