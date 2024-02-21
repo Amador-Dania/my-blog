@@ -16,11 +16,17 @@ Antes de comenzar, asegúrate de tener instalado:
 Sigue estos pasos para instalar el proyecto en tu computadora:
 
 1. Clona el repositorio:
+
+```
    git clone https://github.com/Amador-Dania/my-blog
    cd my-blog
+```
 
 2. Instala las dependencias:
+
+```
    npm install
+```
 
 3. Configura la base de datos con Prisma:
 
@@ -36,7 +42,10 @@ Sigue estos pasos para instalar el proyecto en tu computadora:
   ```
 
 4. Ejecuta el servidor de desarrollo:
+
+```
    npm run dev
+```
 
 Abre [http://localhost:3000](http://localhost:3000) con tu navegador para ver el resultado.
 
