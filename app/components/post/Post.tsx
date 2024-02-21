@@ -33,9 +33,6 @@ export default function Post({ post }: PostProps) {
     }
   }
 
-  function handleEdit() {
-    router.push(`/dashboard/post/edit/${post.id}`);
-  }
   return (
     <>
       <div className="container mx-auto p-8">
@@ -56,7 +53,7 @@ export default function Post({ post }: PostProps) {
             <button
               className="flex items-center justify-center bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
               onClick={() => {
-                handleEdit();
+                router.push(`/dashboard/post/edit/${post.id}`);
               }}
             >
               <svg

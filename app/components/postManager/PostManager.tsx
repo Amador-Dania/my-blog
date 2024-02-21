@@ -1,89 +1,22 @@
 "use client";
-import Post from "@/app/types/post";
-// Third-party libraries
-import axios from "axios";
-import { format } from "date-fns";
-import { is } from "date-fns/locale/is";
-
-//  Next.js hooks and utilities
-import { useRouter } from "next/navigation";
-
-// React import
-import { useState } from "react";
 
 // Local imports
+import Post from "@/app/types/post";
+import usePostManager from "./usePostManager";
 
-interface CreatePostProps {
+interface PostManagerProps {
   existingPost?: Post;
 }
 
-interface newPostInterface {
-  name: string;
-  title: string;
-  content: string;
-  createdAt: string;
-}
-
-const hostName = "http://localhost:3000";
-const url = "/api/post";
-
-function CreatePost({ existingPost }: CreatePostProps) {
-  const [newPost, setNewPost] = useState<newPostInterface>({
-    name: existingPost?.author.name || "",
-    title: existingPost?.title || "",
-    content: existingPost?.content || "",
-    createdAt: format(existingPost?.createdAt || new Date(), "yyyy-MM-dd"),
-  });
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const isEditing = !!existingPost;
-
-  const router = useRouter();
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (
-      !newPost.name ||
-      !newPost.title ||
-      !newPost.content ||
-      !newPost.createdAt
-    ) {
-      setErrorMessage("All fields must be filled out.");
-      return;
-    }
-
-    if (isEditing) {
-      try {
-        const edit = axios.patch(`${hostName}${url}/${existingPost.id}`, {
-          title: newPost.title,
-          content: newPost.content,
-          name: newPost.name,
-        });
-
-        console.log(edit);
-        localStorage.removeItem(url);
-        router.push("/");
-      } catch (error) {
-        console.log("Error", error);
-      }
-    } else {
-      axios
-        .post(`${hostName}${url}`, newPost, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          localStorage.removeItem(url);
-          router.push("/");
-        })
-        .catch((error) => {
-          setErrorMessage(error.response.data.message || "An error occurred");
-          console.error("Error creating the post", error.response);
-        });
-    }
-  };
+function PostManager({ existingPost }: PostManagerProps) {
+  const {
+    handleSubmit,
+    newPost,
+    setNewPost,
+    errorMessage,
+    setErrorMessage,
+    isEditing,
+  } = usePostManager(existingPost);
 
   return (
     <div className="container mx-auto p-4">
@@ -171,4 +104,4 @@ function CreatePost({ existingPost }: CreatePostProps) {
   );
 }
 
-export default CreatePost;
+export default PostManager;

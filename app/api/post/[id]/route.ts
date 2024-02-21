@@ -16,7 +16,7 @@ export async function PATCH(
   }
 
   try {
-    const updatePost = await prisma.post.update({
+    await prisma.post.update({
       where: {
         id: Number(id),
       },
@@ -25,7 +25,7 @@ export async function PATCH(
         content: content,
       },
     });
-    const updateAuthor = await prisma.user.update({
+    await prisma.user.update({
       where: {
         id: Number(id),
       },
@@ -34,8 +34,7 @@ export async function PATCH(
       },
     });
 
-    console.log(updatePost, updateAuthor, "Update succesfully");
-    return NextResponse.json({ message: "Update" }, { status: 200 });
+    return NextResponse.json({ message: "Updated" }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: error }, { status: 500 });
   }

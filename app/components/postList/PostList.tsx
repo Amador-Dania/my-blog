@@ -76,7 +76,16 @@ function PostList({ searchText, filterOption }: PostListProps) {
         </div>
       );
     } else {
-      return <h1>No Posts + Create one using the create button.</h1>;
+      return (
+        <div className="flex justify-center items-center h-screen">
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-800 dark:text-gray-200">
+            No Posts Available{" "}
+            <span className="text-blue-500">
+              Create one using the create button.
+            </span>
+          </h1>
+        </div>
+      );
     }
   }
 
