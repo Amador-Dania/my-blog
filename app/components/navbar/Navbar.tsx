@@ -37,6 +37,7 @@ function Navbar({
         <div className="flex flex-col md:flex-row items-center mt-2 md:mt-0 space-y-2 md:space-y-0 space-x-0 md:space-x-4">
           <input
             type="text"
+            id="Search"
             className="p-2 border border-gray-300 rounded-md"
             placeholder="Search..."
             value={searchText}
@@ -44,6 +45,7 @@ function Navbar({
           />
           <select
             className="p-2 border border-gray-300 rounded-md"
+            id="select-option"
             value={filterOption}
             onChange={(e) => setFilterOption && setFilterOption(e.target.value)}
           >

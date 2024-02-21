@@ -20,7 +20,7 @@ function PostManager({ existingPost }: PostManagerProps) {
 
   return (
     <div className="container mx-auto p-4">
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4" id="post-manager">
         <div>
           <label
             htmlFor="title"
